@@ -136,11 +136,23 @@ export function RaceHero({ race }: RaceHeroProps) {
 
                 {/* Main Title */}
                 <h1 className="text-4xl md:text-7xl lg:text-7xl font-black uppercase tracking-wide mb-4 text-shadow-strong">
-                    <span className="block ">
-                        {race.country}
-                    </span>
-                    <span className="block text-[hsl(var(--brand-red))]">
-                        Grand Prix
+                    <span className="block">
+                        {race.officialName.split(/(GRAND PRIX)/i).map((part, i) =>
+                            /GRAND PRIX/i.test(part) ? (
+                                <span
+                                    key={i}
+                                    className="relative inline-block text-[hsl(var(--brand-red))]"
+                                    style={{
+                                        animation: 'none',
+                                        textShadow: 'none',
+                                    }}
+                                >
+                                    {part}
+                                </span>
+                            ) : (
+                                <span key={i}>{part}</span>
+                            )
+                        )}
                     </span>
                 </h1>
 
@@ -156,7 +168,7 @@ export function RaceHero({ race }: RaceHeroProps) {
                 <div className="mb-12">
                     <p className="text-foreground-muted uppercase tracking-[0.2em] text-xs font-semibold mb-6">Lights Out In</p>
                     {countdown && (
-                        <div className="grid grid-cols-4 gap-4 md:gap-8 max-w-3xl mx-auto"> 
+                        <div className="grid grid-cols-4 gap-4 md:gap-8 max-w-3xl mx-auto">
                             {[
                                 { value: countdown.days, label: 'Days' },
                                 { value: countdown.hours, label: 'Hrs' },
