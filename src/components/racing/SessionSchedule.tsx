@@ -30,7 +30,7 @@ export function SessionSchedule({ race }: SessionScheduleProps) {
             const now = new Date();
 
             for (const session of sessions) {
-                if (!session) continue;
+                if (!session || session.status === 'completed') continue;
 
                 const sessionDate = new Date(`${session.date}T${session.time}:00`);
                 if (sessionDate > now) {

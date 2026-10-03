@@ -19,7 +19,10 @@ export function RaceSchedule({ race }: RaceScheduleProps) {
         return () => clearInterval(timer);
     }, []);
 
-    const getSessionStatus = (sessionDate: string, sessionTime: string): SessionStatus => {
+    const getSessionStatus = (session: { date: string; time: string; status?: 'completed' | 'live' | 'upcoming'; name: string }): SessionStatus => {
+        if (session.status === 'live') return 'live';
+        if (session.status === 'completed') return 'completed';
+
         try {
             // Extract timezone offset from weekendStart (e.g., "+11:00" or "-04:00" or "Z")
             // format is usually YYYY-MM-DDTHH:mm:ss+HH:mm
@@ -27,13 +30,11 @@ export function RaceSchedule({ race }: RaceScheduleProps) {
             const offset = offsetMatch ? offsetMatch[0] : 'Z';
 
             // Construct ISO string for the session start
-            const sessionIso = `${sessionDate}T${sessionTime}:00${offset}`;
+            const sessionIso = `${session.date}T${session.time}:00${offset}`;
             const start = new Date(sessionIso);
 
-            // Session duration ~2 hours
-            // "Live" status continues for 1 hour AFTER the session completion
-            // Total "Live" window = 2 hours duration + 1 hour buffer = 3 hours
-            const liveWindowDurationMs = (2 * 60 * 60 * 1000) + (1 * 60 * 60 * 1000);
+            // Generous window: 2.5 hours duration + 1.5 hour buffer = 4 hours
+            const liveWindowDurationMs = (2.5 * 60 * 60 * 1000) + (1.5 * 60 * 60 * 1000);
             const end = new Date(start.getTime() + liveWindowDurationMs);
             const openTime = new Date(start.getTime() - 60 * 60 * 1000); // 60 mins before
 
@@ -143,7 +144,7 @@ export function RaceSchedule({ race }: RaceScheduleProps) {
                             </h3>
 
                             {day.items.map((session: any, index) => {
-                                const status = getSessionStatus(session.date, session.time);
+                                const status = getSessionStatus(session);
                                 const isLive = status === 'live';
 
                                 const StatusBadge = (

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { GrandPrix } from '@/data/f1-calendar-2026';
+import { GrandPrix, RaceSession } from '@/data/f1-calendar-2026';
 import { getCountdownToSession } from '@/lib/utils/timezone';
 import { SafeAdFrame } from '@/components/ads/SafeAdFrame';
 
@@ -26,31 +26,45 @@ export function RaceHero({ race }: RaceHeroProps) {
             const offsetMatch = race.weekendStart.match(/([+-]\d{2}:\d{2})$/);
             const offset = offsetMatch ? offsetMatch[1] : 'Z';
 
-            const sessions = Object.values(race.sessions).filter(s => s !== undefined) as { name: string; date: string; time: string }[];
+            const sessions = Object.values(race.sessions).filter(s => s !== undefined) as (RaceSession & { name: string; date: string; time: string })[];
 
             let live = false;
 
+            // 1. Prioritize any session explicitly marked as live
+            const explicitLiveSession = sessions.find(s => s.status === 'live');
+            if (explicitLiveSession) {
+                setIsLive(true);
+                setActiveSession(explicitLiveSession.name);
+                return;
+            }
+
             for (const session of sessions) {
+                if (session.status === 'completed') {
+                    continue;
+                }
+
                 // Construct session start time with correct timezone
                 const sessionStart = new Date(`${session.date}T${session.time}:00${offset}`);
 
                 // Determine duration based on session type
-                // Race: 120 mins approx limit/window
-                // Others: 60 mins
-                let durationMinutes = 60;
+                // Race: 150 mins approx limit/window
+                // Qualifying: 150 mins to handle red flags and post-qualifying analysis
+                // Others: 90 mins
+                let durationMinutes = 90;
                 if (session.name.toLowerCase().includes('race')) {
-                    durationMinutes = 120;
-                } else if (session.name.toLowerCase().includes('sprint') && !session.name.toLowerCase().includes('qualifying')) {
-                    // Sprint race is approx 30-40 mins, allocate 60 to be safe
-                    durationMinutes = 60;
+                    durationMinutes = 150;
+                } else if (session.name.toLowerCase().includes('qualifying')) {
+                    durationMinutes = 150;
+                } else if (session.name.toLowerCase().includes('sprint')) {
+                    durationMinutes = 90;
                 }
 
                 // Window:
                 // Open: -60 mins before start
-                // Close: +60 mins after end (End = Start + Duration)
+                // Close: +90 mins after end (End = Start + Duration)
                 const openTime = new Date(sessionStart.getTime() - 60 * 60 * 1000);
                 const endTime = new Date(sessionStart.getTime() + durationMinutes * 60 * 1000);
-                const closeTime = new Date(endTime.getTime() + 60 * 60 * 1000);
+                const closeTime = new Date(endTime.getTime() + 90 * 60 * 1000);
 
                 if (now >= openTime && now <= closeTime) {
                     live = true;
@@ -62,10 +76,19 @@ export function RaceHero({ race }: RaceHeroProps) {
                 }
             }
 
-            // In development, always enable (bypass time restriction) for testing purposes
-            if (process.env.NODE_ENV === 'development') {
+            // If race itself is marked live, keep live status active
+            if (!live && race.status === 'live') {
                 live = true;
-                setActiveSession('FP3');
+                const activeOrNext = sessions.find(s => s.status !== 'completed') || sessions[sessions.length - 1];
+                if (activeOrNext) {
+                    setActiveSession(activeOrNext.name);
+                }
+            }
+
+            // In development, always enable (bypass time restriction) for testing purposes
+            if (process.env.NODE_ENV === 'development' && !live) {
+                live = true;
+                setActiveSession('Qualifying');
             }
 
             setIsLive(live);
