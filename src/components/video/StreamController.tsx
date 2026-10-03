@@ -14,17 +14,12 @@ export function StreamController() {
     const [activeStream, setActiveStream] = useState<string>(STREAMS.DEFAULT);
     const [activeButton, setActiveButton] = useState<'DEFAULT' | 'BACKUP_1' | 'BACKUP_2' | 'BACKUP_3'>('DEFAULT');
     const [isTVMode, setIsTVMode] = useState(false);
-    const [isHDLocked, setIsHDLocked] = useState(true);
+    const [isHDLocked, setIsHDLocked] = useState(false);
+
     useEffect(() => {
         const handleFullscreenChange = () => {
             setIsTVMode(!!document.fullscreenElement);
         };
-
-        // Check if HD is already unlocked in this session
-        const hasUnlocked = sessionStorage.getItem('hd_unlocked');
-        if (hasUnlocked === 'true') {
-            setIsHDLocked(false);
-        }
 
         document.addEventListener('fullscreenchange', handleFullscreenChange);
 

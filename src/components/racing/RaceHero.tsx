@@ -46,33 +46,33 @@ export function RaceHero({ race }: RaceHeroProps) {
                 // Construct session start time with correct timezone
                 const sessionStart = new Date(`${session.date}T${session.time}:00${offset}`);
 
-                // Determine duration based on session type
-                // Race: 150 mins approx limit/window
-                // Qualifying: 150 mins to handle red flags and post-qualifying analysis
-                // Others: 90 mins
-                let durationMinutes = 90;
-                if (session.name.toLowerCase().includes('race')) {
-                    durationMinutes = 150;
-                } else if (session.name.toLowerCase().includes('qualifying')) {
-                    durationMinutes = 150;
-                } else if (session.name.toLowerCase().includes('sprint')) {
-                    durationMinutes = 90;
-                }
+                const isRace = session.name.toLowerCase().includes('race') && !session.name.toLowerCase().includes('sprint');
 
-                // Window:
-                // Open: -60 mins before start
-                // Close: +90 mins after end (End = Start + Duration)
-                const openTime = new Date(sessionStart.getTime() - 60 * 60 * 1000);
-                const endTime = new Date(sessionStart.getTime() + durationMinutes * 60 * 1000);
-                const closeTime = new Date(endTime.getTime() + 90 * 60 * 1000);
+                let openTime: Date;
+                let closeTime: Date;
+
+                if (isRace) {
+                    // Race: Opens 2 hours before start, closes after Monday (weekendEnd)
+                    openTime = new Date(sessionStart.getTime() - 2 * 60 * 60 * 1000);
+                    closeTime = new Date(race.weekendEnd);
+                } else if (session.name.toLowerCase().includes('qualifying')) {
+                    openTime = new Date(sessionStart.getTime() - 60 * 60 * 1000);
+                    closeTime = new Date(sessionStart.getTime() + (150 + 90) * 60 * 1000);
+                } else {
+                    openTime = new Date(sessionStart.getTime() - 60 * 60 * 1000);
+                    closeTime = new Date(sessionStart.getTime() + (90 + 60) * 1000);
+                }
 
                 if (now >= openTime && now <= closeTime) {
                     live = true;
                     setActiveSession(session.name);
                     break;
                 } else if (now < openTime && nextSessionLabel === "") {
-                    // Try to catch the first upcoming session
-                    setNextSessionLabel(`${session.name} starts at ${session.time} Local`);
+                    if (isRace) {
+                        setNextSessionLabel(`${session.name} starts at ${session.time} Local (Stream opens 2 hours before)`);
+                    } else {
+                        setNextSessionLabel(`${session.name} starts at ${session.time} Local (Opens 60 mins before)`);
+                    }
                 }
             }
 
@@ -83,12 +83,6 @@ export function RaceHero({ race }: RaceHeroProps) {
                 if (activeOrNext) {
                     setActiveSession(activeOrNext.name);
                 }
-            }
-
-            // In development, always enable (bypass time restriction) for testing purposes
-            if (process.env.NODE_ENV === 'development' && !live) {
-                live = true;
-                setActiveSession('Qualifying');
             }
 
             setIsLive(live);
@@ -238,10 +232,10 @@ export function RaceHero({ race }: RaceHeroProps) {
                                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
                                 </svg>
-                                Watch Live
+                                Stream Opens 2 Hours Before Race
                             </button>
                             <span className="text-xs text-red-500 font-medium uppercase tracking-wider animate-pulse max-w-sm">
-                                {nextSessionLabel ? `Upcoming: ${nextSessionLabel} (Opens 60 mins before)` : `Opens 60 minutes before all sessions`}
+                                {nextSessionLabel ? `Upcoming: ${nextSessionLabel}` : `Stream opens 2 hours before the race`}
                             </span>
                         </div>
                     )}

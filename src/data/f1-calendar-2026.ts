@@ -572,13 +572,13 @@ export const f1Calendar2026: GrandPrix[] = [
     trackImage: "https://media.formula1.com/image/upload/c_fit,h_704/q_auto/v1740000001/common/f1/2026/track/2026trackkualalumpurdetailed.webp",
     dateRange: '02 - 04 OCT',
     weekendStart: '2026-10-02T00:00:00+08:00',
-    weekendEnd: '2026-10-04T23:59:59+08:00',
+    weekendEnd: '2026-10-05T23:59:59+08:00',
     sessions: {
       fp1: { name: 'Practice 1', date: '2026-10-02', time: '10:00', status: 'completed' },
       fp2: { name: 'Practice 2', date: '2026-10-02', time: '13:30', status: 'completed' },
       fp3: { name: 'Practice 3', date: '2026-10-03', time: '10:00', status: 'completed' },
-      qualifying: { name: 'Qualifying', date: '2026-10-03', time: '13:30', status: 'live' },
-      race: { name: 'Race', date: '2026-10-04', time: '12:30' },
+      qualifying: { name: 'Qualifying', date: '2026-10-03', time: '13:30', status: 'completed' },
+      race: { name: 'Race', date: '2026-10-04', time: '12:30', status: 'upcoming' },
     },
     facts: {
       circuitLength: '5.543',
@@ -589,7 +589,7 @@ export const f1Calendar2026: GrandPrix[] = [
     },
     countryCode: 'MY',
     timezone: 'Asia/Kuala_Lumpur',
-    status: 'live',
+    status: 'upcoming',
   },
   {
     round: 19,
@@ -602,7 +602,7 @@ export const f1Calendar2026: GrandPrix[] = [
     circuit: 'Marina Bay Street Circuit',
     dateRange: '09 - 11 OCT',
     weekendStart: '2026-10-09T00:00:00+08:00',
-    weekendEnd: '2026-10-11T23:59:59+08:00',
+    weekendEnd: '2026-10-12T23:59:59+08:00',
     sessions: {
       fp1: { name: 'Practice 1', date: '2026-10-09', time: '16:30' },
       sprintQualifying: { name: 'Sprint Qualifying', date: '2026-10-09', time: '20:30' },
@@ -632,7 +632,7 @@ export const f1Calendar2026: GrandPrix[] = [
     circuit: 'Circuit of the Americas',
     dateRange: '23 - 25 OCT',
     weekendStart: '2026-10-23T00:00:00-05:00',
-    weekendEnd: '2026-10-25T23:59:59-05:00',
+    weekendEnd: '2026-10-26T23:59:59-05:00',
     sessions: {
       fp1: { name: 'Practice 1', date: '2026-10-23', time: '12:30' },
       fp2: { name: 'Practice 2', date: '2026-10-23', time: '16:00' },
@@ -662,7 +662,7 @@ export const f1Calendar2026: GrandPrix[] = [
     circuit: 'Autódromo Hermanos Rodríguez',
     dateRange: '30 OCT - 01 NOV',
     weekendStart: '2026-10-30T00:00:00-06:00',
-    weekendEnd: '2026-11-01T23:59:59-06:00',
+    weekendEnd: '2026-11-02T23:59:59-06:00',
     sessions: {
       fp1: { name: 'Practice 1', date: '2026-10-30', time: '12:30' },
       fp2: { name: 'Practice 2', date: '2026-10-30', time: '16:00' },
@@ -692,7 +692,7 @@ export const f1Calendar2026: GrandPrix[] = [
     circuit: 'Autódromo José Carlos Pace',
     dateRange: '06 - 08 NOV',
     weekendStart: '2026-11-06T00:00:00-03:00',
-    weekendEnd: '2026-11-08T23:59:59-03:00',
+    weekendEnd: '2026-11-09T23:59:59-03:00',
     sessions: {
       fp1: { name: 'Practice 1', date: '2026-11-06', time: '11:30' },
       fp2: { name: 'Practice 2', date: '2026-11-06', time: '15:00' },
@@ -722,7 +722,7 @@ export const f1Calendar2026: GrandPrix[] = [
     circuit: 'Las Vegas Strip Street Circuit',
     dateRange: '20 - 22 NOV',
     weekendStart: '2026-11-20T00:00:00-08:00',
-    weekendEnd: '2026-11-22T23:59:59-08:00',
+    weekendEnd: '2026-11-23T23:59:59-08:00',
     sessions: {
       fp1: { name: 'Practice 1', date: '2026-11-19', time: '16:30' },
       fp2: { name: 'Practice 2', date: '2026-11-19', time: '20:00' },
@@ -752,7 +752,7 @@ export const f1Calendar2026: GrandPrix[] = [
     circuit: 'Lusail International Circuit',
     dateRange: '27 - 29 NOV',
     weekendStart: '2026-11-27T00:00:00+03:00',
-    weekendEnd: '2026-11-29T23:59:59+03:00',
+    weekendEnd: '2026-11-30T23:59:59+03:00',
     sessions: {
       fp1: { name: 'Practice 1', date: '2026-11-27', time: '16:30' },
       fp2: { name: 'Practice 2', date: '2026-11-27', time: '20:00' },
@@ -782,7 +782,7 @@ export const f1Calendar2026: GrandPrix[] = [
     circuit: 'Yas Marina Circuit',
     dateRange: '04 - 06 DEC',
     weekendStart: '2026-12-04T00:00:00+04:00',
-    weekendEnd: '2026-12-06T23:59:59+04:00',
+    weekendEnd: '2026-12-07T23:59:59+04:00',
     sessions: {
       fp1: { name: 'Practice 1', date: '2026-12-04', time: '13:30' },
       fp2: { name: 'Practice 2', date: '2026-12-04', time: '17:00' },

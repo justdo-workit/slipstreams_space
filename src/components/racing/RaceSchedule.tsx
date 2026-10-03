@@ -33,7 +33,20 @@ export function RaceSchedule({ race }: RaceScheduleProps) {
             const sessionIso = `${session.date}T${session.time}:00${offset}`;
             const start = new Date(sessionIso);
 
-            // Generous window: 2.5 hours duration + 1.5 hour buffer = 4 hours
+            const isRace = session.name.toLowerCase().includes('race') && !session.name.toLowerCase().includes('sprint');
+
+            if (isRace) {
+                // Opens 2 hours before the race
+                const openTime = new Date(start.getTime() - 2 * 60 * 60 * 1000);
+                // Closes after the next day, Monday (weekendEnd)
+                const endTime = new Date(race.weekendEnd);
+
+                if (now < openTime) return 'upcoming';
+                if (now >= openTime && now <= endTime) return 'live';
+                return 'completed';
+            }
+
+            // Other sessions (Practice, Sprint, Qualifying):
             const liveWindowDurationMs = (2.5 * 60 * 60 * 1000) + (1.5 * 60 * 60 * 1000);
             const end = new Date(start.getTime() + liveWindowDurationMs);
             const openTime = new Date(start.getTime() - 60 * 60 * 1000); // 60 mins before
@@ -121,7 +134,7 @@ export function RaceSchedule({ race }: RaceScheduleProps) {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                         <span className="text-sm font-bold uppercase tracking-wider">
-                            Live Streams Open 60 Mins Before Session Start
+                            Race Stream Opens 2 Hours Before Lights Out & Remains Open Through Monday
                         </span>
                     </div>
 

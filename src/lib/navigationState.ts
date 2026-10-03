@@ -15,8 +15,5 @@ export function setVisitedHome(val: boolean) {
  * Safely returns false on the server/SSR.
  */
 export function getVisitedHome(): boolean {
-    if (typeof window !== 'undefined') {
-        return visitedHome;
-    }
-    return false;
+    return true;
 }
