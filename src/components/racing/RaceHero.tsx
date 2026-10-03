@@ -52,15 +52,17 @@ export function RaceHero({ race }: RaceHeroProps) {
                 let closeTime: Date;
 
                 if (isRace) {
-                    // Race: Opens 2 hours before start, closes after Monday (weekendEnd)
+                    // Race: Opens 2 hours before start, closes 12 hours after start
                     openTime = new Date(sessionStart.getTime() - 2 * 60 * 60 * 1000);
-                    closeTime = new Date(race.weekendEnd);
+                    closeTime = new Date(sessionStart.getTime() + 12 * 60 * 60 * 1000);
                 } else if (session.name.toLowerCase().includes('qualifying')) {
+                    // Qualifying: Opens 1 hour before, closes 3 hours after start
                     openTime = new Date(sessionStart.getTime() - 60 * 60 * 1000);
-                    closeTime = new Date(sessionStart.getTime() + (150 + 90) * 60 * 1000);
+                    closeTime = new Date(sessionStart.getTime() + 3 * 60 * 60 * 1000);
                 } else {
+                    // FP / Sprint: Opens 1 hour before, closes 2.5 hours after start
                     openTime = new Date(sessionStart.getTime() - 60 * 60 * 1000);
-                    closeTime = new Date(sessionStart.getTime() + (90 + 60) * 1000);
+                    closeTime = new Date(sessionStart.getTime() + (90 + 60) * 60 * 1000);
                 }
 
                 if (now >= openTime && now <= closeTime) {

@@ -589,7 +589,7 @@ export const f1Calendar2026: GrandPrix[] = [
     },
     countryCode: 'MY',
     timezone: 'Asia/Kuala_Lumpur',
-    status: 'upcoming',
+    status: 'live',
   },
   {
     round: 19,
