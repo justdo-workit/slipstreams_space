@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import Script from "next/script";
 import localFont from "next/font/local";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -61,16 +62,31 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        {/* Step 1: Adcash library */}
+        <Script
+          id="aclib"
+          src="//acscdn.com/script/aclib.js"
+          strategy="beforeInteractive"
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${f1Font.variable} antialiased`}
       >
-
         <Suspense fallback={null}>
           <Preloader />
         </Suspense>
         {children}
+
+        {/* Step 2: Autotag script (runs after the library loads) */}
+        <Script id="adcash-autotag" strategy="afterInteractive">
+          {`
+            aclib.runAutoTag({
+              zoneId: '9xrnpxpomy',
+            });
+          `}
+        </Script>
       </body>
     </html>
   );
 }
-
