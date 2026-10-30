@@ -81,8 +81,8 @@ export default function RootLayout({
         {/* Step 2: Autotag script (runs after the library loads) */}
         <Script id="adcash-autotag" strategy="afterInteractive">
           {`
-            aclib.runAutoTag({
-              zoneId: '9xrnpxpomy',
+             aclib.runPop({
+               zoneId: '12382042',
             });
           `}
         </Script>
