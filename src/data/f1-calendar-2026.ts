@@ -1,6 +1,7 @@
 // F1 2026 Race Calendar (Unofficial)
 // Data source: https://www.formula1.com/en/racing/2026.html
-// Last update on 23-11-26 , for Qatar GP 
+// Last update on 23-11-26 , for Qatar GP update 1.1
+
 export interface RaceSession {
   name: string;
   coverImage?: string;
